@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")"/>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    
+            <header>
+                <h1>
+                    <img src="~/images/MVC-logo.jpg" alt="Logo">
+                </h1>
+                <nav>
+                    <ul class="navlist">
+                        <li>  <a asp-controller="Home" asp-action="Index">Index</a></li>
+                        <li>  <a asp-controller="Home" asp-action="About">About</a></li>
+                        <li>  <a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li>  <a asp-controller="Home" asp-action="Projects">Projects</a></li>
+                        <li>  <a asp-controller="Doctor" asp-action="FeverCheck">Check Fever</a></li>
+                    </ul>
+                </nav>
+            </header>
+           
+            <div class="view-container">
+                @RenderBody()
+            </div>
+
+       
+            <footer>
+                <span>
+                    &#9400; @DateTime.Now.ToShortDateString() Madiha Gul
+                </span>
+            </footer>
+        
+
+</body>
+
+</html>

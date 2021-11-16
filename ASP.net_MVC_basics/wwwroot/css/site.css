@@ -1,0 +1,126 @@
+﻿body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+
+body > header {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background-color: cadetblue;
+}
+
+    body > header > h1 {
+        resize: both;
+    }
+
+.navlist {
+    display: flex;
+    justify-content: space-between;
+}
+
+li {
+    list-style: none;
+    padding: 0 20px 0 20px;
+}
+
+    li:hover {
+        font-weight: bold;
+    }
+
+body > footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background-color: cadetblue;
+}
+
+form {
+    border-style: ridge;
+    border-radius: 10px;
+    width: 80%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 20px;
+}
+
+.button {
+    border-radius: 5px;
+    border-style: ridge;
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    opacity: 0.8;
+}
+
+    .button:hover {
+        opacity: 1
+    }
+
+.blue {
+    background-color: cornflowerblue;
+}
+
+.green {
+    background-color: rgb(36, 187, 36)
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.bluetext {
+    color: rgb(24, 101, 179)
+}
+
+.uppercase {
+    font-variant-caps: small-caps;
+}
+
+.view-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh;
+}
