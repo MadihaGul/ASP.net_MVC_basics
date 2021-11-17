@@ -38,17 +38,6 @@ namespace ASP.net_MVC_basics.Models
 
         }
 
-        //public static string IsGuessRight(uint secretNum, uint guess)
-        //{
-        //    if (secretNum==guess)
-        //    {
-        //        return $"Congratulations! You Win.";
-        //    }
-        //    else
-        //    { return $"Sorry! you guessed wrong. Try again"; }
-            
-        //}
-
 
         public static string msg()
         {

@@ -12,10 +12,9 @@ namespace ASP.net_MVC_basics.Controllers
     {
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("SecretNumber", Utility.generateRandomNum().ToString());
-            ViewBag.Message = Utility.gameStart();
-            return View();
+            return RedirectToAction("GuessingGame", "Game");
         }
+        [HttpGet]
         public IActionResult GuessingGame()
         {
             HttpContext.Session.SetString("SecretNumber", Utility.generateRandomNum().ToString());
@@ -32,7 +31,7 @@ namespace ASP.net_MVC_basics.Controllers
             }
             else 
             {
-                ViewBag.Message = "Please enter a number between 1-100";
+                ViewBag.Message = "Error!! Invalid Input. Please enter a number between 1-100";
             }
 
             return View();
