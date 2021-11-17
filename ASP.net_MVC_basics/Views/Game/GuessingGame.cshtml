@@ -14,7 +14,7 @@
 <form asp-controller="Game" asp-action="GuessingGame" method="post">
     @{ if (ViewBag.Message == $"Congratulations! You won.")
         {  <input type="text" id="tbGuess" name="num" placeholder="Guess Number" disabled required="required"> 
-           <button class="button blue" type="submit" onclick="location.href='@Url.Action("Index", "Game")'">Restart</button>}
+           <button class="button blue" type="button" onclick="location.href='@Url.Action("Index", "Game")'">Restart</button>}
         else { <input type="text" id="tbGuess" name="num" placeholder="Guess Number" required="required">
                <button class="button green" type="submit">Go</button>}
         }
