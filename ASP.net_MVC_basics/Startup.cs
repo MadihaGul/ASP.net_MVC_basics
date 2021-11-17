@@ -17,6 +17,13 @@ namespace ASP.net_MVC_basics
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,13 +35,17 @@ namespace ASP.net_MVC_basics
             }
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name: "Default", pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(name: "Doctor",
                                              pattern: "/FeverCheck"
                                              , defaults: new { controller = "Doctor", action = "FeverCheck" });
+
+                endpoints.MapControllerRoute(name: "Game",
+                                             pattern: "/GuessingGame"
+                                             , defaults: new { controller = "Game", action = "GuessingGame" });
 
             });
         }
