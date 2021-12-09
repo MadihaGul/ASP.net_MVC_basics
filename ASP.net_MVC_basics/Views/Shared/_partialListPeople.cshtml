@@ -1,44 +1,23 @@
-﻿@model List<Person>
-@{
-    ViewData["Title"] = "People";
-}
+﻿@model Person
 
-<h4>People List</h4>
-<div class="row">
-    <div class="col-md-3">
-        Name
-    </div>
-    <div class="col-md-3">
-        Phone
-    </div>
-    <div class="col-md-3">
-        City
-    </div>
-    <div class="col-md-3">
-        Delete
-    </div>
-</div>
 
-@foreach (var item in Model)
-{
     <div class="row">
 
         <div class="col-md-3">
-            @item.Name
+            @Model.Name
         </div>
         <div class="col-md-3">
-            @item.Phone
+            @Model.Phone
 
         </div>
         <div class="col-md-3">
-            @item.City
+            @Model.City
         </div>
         <div class="col-md-3">
-            <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { id=item.PersonId})'">Delete</a>
+            <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { personId=Model.PersonId})'">Delete</a>
         </div>
     </div>
 
-}
 
 
 

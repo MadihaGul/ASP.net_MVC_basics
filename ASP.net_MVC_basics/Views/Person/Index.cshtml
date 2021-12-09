@@ -44,8 +44,29 @@
         </form>
     </div>
     <div class="container">
-        <partial name="_partialListPeople" model="Model.ListPersonView" />
-    </div>
+
+        <h4>People List</h4>
+        <div class="row">
+            <div class="col-md-3">
+                Name
+            </div>
+            <div class="col-md-3">
+                Phone
+            </div>
+            <div class="col-md-3">
+                City
+            </div>
+            <div class="col-md-3">
+                Delete
+            </div>
+        </div>
+
+        @foreach (var item in Model.ListPersonView)
+        {
+            <partial name="_partialListPeople" model="@item" />
+        }
+
+        </div>
 
    
 </div>
