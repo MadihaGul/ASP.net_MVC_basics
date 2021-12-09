@@ -71,6 +71,11 @@ namespace ASP.net_MVC_basics.Controllers
             return RedirectToAction("Index");
         }
 
+        public PartialViewResult PeopleList()
+        {
+            return PartialView("_partialListPeople");
 
+
+        }
     }
 }
