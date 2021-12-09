@@ -1,0 +1,93 @@
+﻿@model PeopleViewModel
+@{
+    ViewData["Title"] = "Person_Index";
+}
+<div class="container">
+    <h2 class="uppercase">
+        Create, Delete or View People
+    </h2>
+
+    <div>
+        <form asp-action="Index" method="post" role="form">
+            @Html.AntiForgeryToken()
+            <h4>Filter</h4>
+            <label asp-for="FilterString"></label>
+            <input asp-for="FilterString" required />
+            <input type="submit" class="btn btn-primary" name="btnFilter" value="search" />
+        </form>
+
+    </div>
+    <div>
+        <form asp-action="CreatePerson" method="post" role="form">
+            @Html.AntiForgeryToken()
+            <div>
+                <h4>Filter</h4>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span style="color:crimson" asp-validation-for="Name"></span>
+
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" />
+                <span style="color:crimson" asp-validation-for="Phone"></span>
+
+                <label asp-for="City"></label>
+                <input asp-for="City" />
+                <span style="color:crimson" asp-validation-for="City"></span>
+            </div>
+            <div>
+                <input type="submit" class="btn btn-primary" name="btnCreate" value="Add Person" />
+            </div>
+            <span >
+                @if (ViewBag.Message != null)
+                { @ViewBag.Message}
+            </span>
+        </form>
+    </div>
+
+    <table class="table table-active table-hover table-primary">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListPersonView)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+
+                    </td>
+                    <td>
+                        @item.Phone
+
+                    </td>
+                    <td>
+                        @item.City
+
+                    </td>
+                    <td>
+                        <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { id=item.PersonId})'">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+
+
+</div>
