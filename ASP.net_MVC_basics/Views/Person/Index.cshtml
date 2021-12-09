@@ -37,57 +37,15 @@
             <div>
                 <input type="submit" class="btn btn-primary" name="btnCreate" value="Add Person" />
             </div>
-            <span >
+            <span>
                 @if (ViewBag.Message != null)
-                { @ViewBag.Message}
+                {@ViewBag.Message}
             </span>
         </form>
     </div>
+    <div class="container">
+        <partial name="_partialListPeople" model="Model.ListPersonView" />
+    </div>
 
-    <table class="table table-active table-hover table-primary">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Phone
-                </th>
-                <th>
-                    City
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ListPersonView)
-            {
-                <tr>
-                    <td>
-                        @item.Name
-
-                    </td>
-                    <td>
-                        @item.Phone
-
-                    </td>
-                    <td>
-                        @item.City
-
-                    </td>
-                    <td>
-                        <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { id=item.PersonId})'">Delete</a>
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
-
-
-
+   
 </div>

@@ -1,0 +1,87 @@
+﻿@model List<Person>
+@{
+    ViewData["Title"] = "People";
+}
+
+<h4>People List</h4>
+<div class="row">
+    <div class="col-md-3">
+        Name
+    </div>
+    <div class="col-md-3">
+        Phone
+    </div>
+    <div class="col-md-3">
+        City
+    </div>
+    <div class="col-md-3">
+        Delete
+    </div>
+</div>
+
+@foreach (var item in Model)
+{
+    <div class="row">
+
+        <div class="col-md-3">
+            @item.Name
+        </div>
+        <div class="col-md-3">
+            @item.Phone
+
+        </div>
+        <div class="col-md-3">
+            @item.City
+        </div>
+        <div class="col-md-3">
+            <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { id=item.PersonId})'">Delete</a>
+        </div>
+    </div>
+
+}
+
+
+
+@*<table class="table table-active table-hover table-primary">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+
+                    </td>
+                    <td>
+                        @item.Phone
+
+                    </td>
+                    <td>
+                        @item.City
+
+                    </td>
+                    <td>
+                        <a href="#" onclick="location.href = '@Url.Action("DeletePerson","Person", new { id=item.PersonId})'">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>*@
