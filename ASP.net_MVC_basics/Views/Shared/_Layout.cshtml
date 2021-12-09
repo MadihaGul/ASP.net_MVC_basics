@@ -2,25 +2,28 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    
-    <link rel="stylesheet" href="@Url.Content("~/css/site.css")"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" />
+
     <title>@ViewBag.Title</title>
 </head>
-<body>
+<body >
     
             <header>
                 <h1>
                     <img src="~/images/MVC-logo.jpg" alt="Logo">
                 </h1>
-                <nav>
-                    <ul class="navlist">
-                        <li>  <a asp-controller="Home" asp-action="Index">Index</a></li>
-                        <li>  <a asp-controller="Home" asp-action="About">About</a></li>
-                        <li>  <a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        <li>  <a asp-controller="Home" asp-action="Projects">Projects</a></li>
-                        <li>  <a asp-controller="Doctor" asp-action="FeverCheck">Check Fever</a></li>
-                        <li>  <a asp-controller="Game" asp-action="GuessingGame">Play Game</a></li>
+                <nav >
+                    <ul class="navlist " >
+                        <li>  <a class="bluetext bold" asp-controller="Home" asp-action="Index">Index</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Home" asp-action="About">About</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Home" asp-action="Projects">Projects</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Doctor" asp-action="FeverCheck">Check Fever</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Game" asp-action="GuessingGame">Play Game</a></li>
+                        <li>  <a class="bluetext bold" asp-controller="Person" asp-action="Index">People</a></li>
                     </ul>
                 </nav>
             </header>

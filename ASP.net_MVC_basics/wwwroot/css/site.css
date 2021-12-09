@@ -67,6 +67,7 @@ li {
 
     li:hover {
         font-weight: bold;
+
     }
 
 body > footer {
@@ -88,6 +89,7 @@ form {
     padding-left: 20px;
 }
 
+
 .button {
     border-radius: 5px;
     border-style: ridge;
@@ -101,6 +103,7 @@ form {
     .button:hover {
         opacity: 1
     }
+
 
 .blue {
     background-color: cornflowerblue;
