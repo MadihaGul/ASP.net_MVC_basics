@@ -11,6 +11,12 @@ namespace ASP.net_MVC_basics.Controllers
     {
         public IActionResult Index()
         {
+            PersonMemory personMemory = new PersonMemory();
+            PeopleViewModel ListPersonViewModel = new PeopleViewModel { ListPersonView = personMemory.ReadPerson() };
+            if (ListPersonViewModel.ListPersonView.Count == 0 || ListPersonViewModel.ListPersonView == null)
+            {
+                personMemory.SeedPerson();
+            }
             return View();
         }
 
@@ -19,7 +25,39 @@ namespace ASP.net_MVC_basics.Controllers
         {
             PersonMemory personMemory = new PersonMemory();
             List<Person> peopleList = personMemory.ReadPerson();
-            return PartialView("_partialListPeople", peopleList);
+            return PartialView("_partialListPeopleAjax", peopleList);
+        }
+
+        [HttpPost]
+        public IActionResult FindPeopleById(int PeopleId)
+        {
+            PersonMemory personMemory = new PersonMemory();
+            Person targetPerson =personMemory.ReadPerson(PeopleId);
+            List<Person> people = new List<Person>();
+            if (targetPerson!=null)
+            {
+                people.Add(targetPerson);
+            }
+            return PartialView("_partialListPeopleAjax", people);
+        }
+
+        [HttpPost]
+        public IActionResult DeletePeopleById(int PeopleId)
+        {
+            bool sucess = false;
+            PersonMemory personMemory = new PersonMemory();
+            Person targetPerson = personMemory.ReadPerson(PeopleId);
+            List<Person> people = personMemory.ReadPerson();
+            if (targetPerson != null)
+            {
+                sucess=people.Remove(targetPerson);
+
+
+            }
+            if (sucess)
+            { return StatusCode(200); }
+            else
+            { return StatusCode(404); }
         }
 
     }
