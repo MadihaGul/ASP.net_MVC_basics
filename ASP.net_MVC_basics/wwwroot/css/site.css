@@ -1,6 +1,8 @@
 ﻿body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin:5px;
+    background-color:gainsboro;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -128,5 +130,5 @@ form {
 .view-container {
     display: flex;
     flex-direction: column;
-    min-height: 75vh;
+    min-height: 80vh;
 }
