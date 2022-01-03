@@ -25,6 +25,7 @@ namespace ASP.net_MVC_basics.Controllers
         {
             PersonMemory personMemory = new PersonMemory();
             List<Person> peopleList = personMemory.ReadPerson();
+            if (peopleList.Count==0 || peopleList==null) { }
             return PartialView("_partialListPeopleAjax", peopleList);
         }
 
