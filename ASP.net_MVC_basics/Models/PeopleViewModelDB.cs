@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace ASP.net_MVC_basics.Models
 {
-    public class PeopleViewModel:CreatePersonViewModel
+    public class PeopleViewModelDB : CreatePersonViewModel
     {
-
-        public List<Person> ListPersonView { get; set; }
+        public List<PeopleModel> ListPersonView { get; set; }
         public string FilterString { get; set; }
 
-        public PeopleViewModel()
+        public PeopleViewModelDB()
         {
-            ListPersonView = new List<Person>();
+            ListPersonView = new List<PeopleModel>();
         }
     }
 }
