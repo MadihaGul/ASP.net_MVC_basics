@@ -17,7 +17,9 @@ namespace ASP.net_MVC_basics.Controllers
         public IActionResult Index()
         {
             PeopleViewModelDB ListPeopleViewModel = new PeopleViewModelDB { ListPersonView = _context.People.ToList()};
-    
+            
+            if(TempData["shortMessage"] != null)
+            ViewBag.Message = TempData["shortMessage"].ToString();
             return View(ListPeopleViewModel);
         }
 
@@ -26,18 +28,24 @@ namespace ASP.net_MVC_basics.Controllers
         {
             viewModel.ListPersonView.Clear();
             if (viewModel.FilterString == "" || viewModel.FilterString == null)
-            { viewModel.ListPersonView = _context.People.ToList(); }
+            {
+                viewModel.ListPersonView = _context.People.ToList(); 
+            }
             else
             {
-                foreach (var p in _context.People.ToList())
-                {
-                    if (p.Name.Contains(viewModel.FilterString, StringComparison.OrdinalIgnoreCase))
-                    {
-                        viewModel.ListPersonView.Add(p);
+                var listPerson =
+                    _context.People.Where(p => p.Name.ToLower().Contains(viewModel.FilterString.ToLower()));
+                viewModel.ListPersonView.AddRange(listPerson.ToList());
 
-                    }
+                //foreach (var p in _context.People.ToList())
+                //{
+                //    if (p.Name.Contains(viewModel.FilterString, StringComparison.OrdinalIgnoreCase))
+                //    {
+                //        viewModel.ListPersonView.Add(p);
 
-                }
+                //    }
+
+                //}
             }
             return View(viewModel);
         }
@@ -55,24 +63,30 @@ namespace ASP.net_MVC_basics.Controllers
             {
                 _context.People.Add(person);
                 _context.SaveChanges();
-                ViewBag.Message = "Success! Person added";
+                TempData["shortMessage"] = "Success! Person added";
                 return RedirectToAction("Index");
 
             }
-            ViewBag.Message = "Error! Failed to add person" + ModelState.Values;
+            else
+            {
+                TempData["shortMessage"] = "Error! Failed to add person";// + ModelState.Values;
+
+            }
             return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult DeletePersonDb(int personId)
         {
-            
+
             if (ModelState.IsValid)
             {
 
                 _context.People.Remove(_context.People.Find(personId));
                 _context.SaveChanges();
-                ViewBag.Message = "Success! Person deleted";
+                TempData["shortMessage"] = "Success! Person is deleted";
+
             }
+            else { TempData["shortMessage"] = "Fail! Person not deleted"; }
             return RedirectToAction("Index");
             
         }
@@ -82,7 +96,7 @@ namespace ASP.net_MVC_basics.Controllers
             PersonMemory personMemory = new PersonMemory();
             Person targetPerson = personMemory.ReadPerson(personId);
             personMemory.DeletePerson(targetPerson);
-            ViewBag.Message = "Success! Person deleted";
+            TempData["shortMessage"] = "Success! Person deleted";
 
             return RedirectToAction("Index");
         }

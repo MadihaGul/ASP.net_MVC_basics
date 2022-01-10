@@ -6,15 +6,17 @@
     <h2 class="uppercase">
         Create, Delete or View People
     </h2>
-    
+    <h4>
+        <span>
+            @if (ViewBag.Message != null)
+            {@ViewBag.Message}
+        </span>
+    </h4>
     <a asp-action="CreatePerson">CreatePerson</a>
     <div>
         <form asp-action="Index" method="post" role="form">
             @Html.AntiForgeryToken()
-            <span>
-                @if (ViewBag.Message != null)
-                {@ViewBag.Message}
-            </span>
+
             <h4>Filter</h4>
             <label asp-for="FilterString"></label>
             <input asp-for="FilterString" />
