@@ -9,6 +9,16 @@
     <Compile Remove="Migrations\20220107161103_Init.Designer.cs" />
     <Compile Remove="Migrations\20220107163419_InitNew.cs" />
     <Compile Remove="Migrations\20220107163419_InitNew.Designer.cs" />
+    <Compile Remove="Migrations\20220116140100_Added City and Country One to many relations.cs" />
+    <Compile Remove="Migrations\20220116140100_Added City and Country One to many relations.Designer.cs" />
+    <Compile Remove="Migrations\20220116140332_Added City and Country One to Many relation.cs" />
+    <Compile Remove="Migrations\20220116140332_Added City and Country One to Many relation.Designer.cs" />
+    <Compile Remove="Migrations\20220116143145_Added one to many Relation.cs" />
+    <Compile Remove="Migrations\20220116143145_Added one to many Relation.Designer.cs" />
+    <Compile Remove="Migrations\20220116145610_One to Many EFuppgift5.cs" />
+    <Compile Remove="Migrations\20220116145610_One to Many EFuppgift5.Designer.cs" />
+    <Compile Remove="Migrations\20220116153152_EFUppgift5 Seed Data.cs" />
+    <Compile Remove="Migrations\20220116153152_EFUppgift5 Seed Data.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

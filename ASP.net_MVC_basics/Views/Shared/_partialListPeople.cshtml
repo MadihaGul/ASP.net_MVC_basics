@@ -72,11 +72,12 @@
 
                     </td>
                     <td>
-                        @item.City
+                        @item.City.CityName
 
                     </td>
                     <td>
-                        <a  href="#" onclick="location.href = '@Url.Action("DeletePersonDb","Person", new { personId=item.PersonId})'">Delete</a>
+                        @*<a href="#" onclick="location.href = '@Url.Action("DeletePersonDb","Person", new { personId=item.PersonId})'">Delete</a>*@
+                        <a asp-action="Delete" asp-route-id="@item.PersonId">Delete</a>
                     </td>
                 </tr>
             }
