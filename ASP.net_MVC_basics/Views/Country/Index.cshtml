@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ASP.net_MVC_basics.Data.CountryModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h2 class="uppercase">
+    Create, Delete or View Countries
+</h2>
+<h4>
+    <span>
+        @if (ViewBag.Message != null)
+        {@ViewBag.Message}
+    </span>
+</h4>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table table-active table-hover table-primary">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+
+            <th>
+                Action
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.CountryName
+
+                </td>
+
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.CountryId">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

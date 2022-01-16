@@ -19,8 +19,8 @@ namespace ASP.net_MVC_basics.Data
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Please enter city"), MaxLength(100), MinLength(2)]
-        [DataType(DataType.Text)]
-        public string City { get; set; }
+        //Navigation properties
+        public int CityId { get; set; }
+        public virtual CityModel City { get; set; }
     }
 }

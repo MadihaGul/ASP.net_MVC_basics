@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ASP.net_MVC_basics.Models;
 using ASP.net_MVC_basics.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ASP.net_MVC_basics.Controllers
 {
@@ -16,10 +18,9 @@ namespace ASP.net_MVC_basics.Controllers
         
         public IActionResult Index()
         {
-            PeopleViewModelDB ListPeopleViewModel = new PeopleViewModelDB { ListPersonView = _context.People.ToList()};
+            PeopleViewModelDB ListPeopleViewModel = new PeopleViewModelDB { ListPersonView = _context.People.Include(p => p.City).ToList()};
             
-            if(TempData["shortMessage"] != null)
-            ViewBag.Message = TempData["shortMessage"].ToString();
+            
             return View(ListPeopleViewModel);
         }
 
@@ -29,12 +30,12 @@ namespace ASP.net_MVC_basics.Controllers
             viewModel.ListPersonView.Clear();
             if (viewModel.FilterString == "" || viewModel.FilterString == null)
             {
-                viewModel.ListPersonView = _context.People.ToList(); 
+                viewModel.ListPersonView = _context.People.Include(p => p.City).ToList(); 
             }
             else
             {
                 var listPerson =
-                    _context.People.Where(p => p.Name.ToLower().Contains(viewModel.FilterString.ToLower()));
+                    _context.People.Include(p => p.City).Where(p => p.Name.ToLower().Contains(viewModel.FilterString.ToLower()));
                 viewModel.ListPersonView.AddRange(listPerson.ToList());
 
                 //foreach (var p in _context.People.ToList())
@@ -52,45 +53,93 @@ namespace ASP.net_MVC_basics.Controllers
 
         public IActionResult CreatePerson()
         {
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityName");
             return View();
-
         }
 
         [HttpPost]
-        public IActionResult CreatePerson(PeopleModel person)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePerson([Bind("PersonId,Name,Phone,CityId")] PeopleModel peopleModel)
         {
             if (ModelState.IsValid)
             {
-                _context.People.Add(person);
-                _context.SaveChanges();
-                TempData["shortMessage"] = "Success! Person added";
-                return RedirectToAction("Index");
-
+                _context.Add(peopleModel);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                TempData["shortMessage"] = "Error! Failed to add person";// + ModelState.Values;
-
-            }
-            return RedirectToAction("Index");
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityName", peopleModel.CityId);
+            return View(peopleModel);
         }
-        [HttpGet]
-        public IActionResult DeletePersonDb(int personId)
+
+
+        //[HttpPost]
+        //public IActionResult CreatePerson(PeopleModel person)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.People.Add(person);
+        //        _context.SaveChanges();
+        //        TempData["shortMessage"] = "Success! Person added";
+        //        return RedirectToAction("Index");
+
+        //    }
+        //    else
+        //    {
+        //        TempData["shortMessage"] = "Error! Failed to add person";// + ModelState.Values;
+
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+        //[HttpGet]
+        //public IActionResult DeletePersonDb(int personId)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+
+        //        _context.People.Remove(_context.People.Find(personId));
+        //        _context.SaveChanges();
+        //        TempData["shortMessage"] = "Success! Person is deleted";
+
+        //    }
+        //    else { TempData["shortMessage"] = "Fail! Person not deleted"; }
+        //    return RedirectToAction("Index");
+
+        //}
+
+        // GET: City/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-
-            if (ModelState.IsValid)
+            if (id == null)
             {
-
-                _context.People.Remove(_context.People.Find(personId));
-                _context.SaveChanges();
-                TempData["shortMessage"] = "Success! Person is deleted";
-
+                return NotFound();
             }
-            else { TempData["shortMessage"] = "Fail! Person not deleted"; }
-            return RedirectToAction("Index");
-            
+
+            var peopleModel = await _context.People
+                .Include(c => c.City)
+                .FirstOrDefaultAsync(m => m.PersonId == id);
+            if (peopleModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(peopleModel);
         }
-        
+
+        // POST: City/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var peopleModel = await _context.People.FindAsync(id);
+            _context.People.Remove(peopleModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
         public IActionResult DeletePerson(int personId)
         {
             PersonMemory personMemory = new PersonMemory();
@@ -105,6 +154,11 @@ namespace ASP.net_MVC_basics.Controllers
         public PartialViewResult PeopleList()
         {
             return PartialView("_partialListPeople");
+        }
+
+        private bool PeopleModelExists(int id)
+        {
+            return _context.People.Any(e => e.PersonId == id);
         }
 
         /*
