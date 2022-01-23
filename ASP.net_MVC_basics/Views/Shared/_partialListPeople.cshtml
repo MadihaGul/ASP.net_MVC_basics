@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PeopleModel>
+﻿@model PeopleViewModelDB
 @*@model List<Person>*@
 
 <h4>People List</h4>
@@ -54,32 +54,53 @@
                     City
                 </th>
                 <th>
-                    Action
+                    Language
+                </th>
+               
+                <th>
+                    Delete
                 </th>
             </tr>
 
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.ListPersonView)
             {
-                <tr>
-                    <td>
-                        @item.Name
+            <tr>
+                <td>
+                    @item.Name
 
-                    </td>
-                    <td>
-                        @item.Phone
+                </td>
+                <td>
+                    @item.Phone
 
-                    </td>
-                    <td>
-                        @item.City.CityName
+                </td>
+                <td>
+                    @item.City.CityName
 
-                    </td>
-                    <td>
-                        @*<a href="#" onclick="location.href = '@Url.Action("DeletePersonDb","Person", new { personId=item.PersonId})'">Delete</a>*@
-                        <a asp-action="Delete" asp-route-id="@item.PersonId">Delete</a>
-                    </td>
-                </tr>
+                </td>
+                <td>
+                    @if (item.SpeaksLanguages != null)
+                        @foreach (var language in item.SpeaksLanguages)
+                        {
+
+                            @foreach (var name in Model.ListLanguage)
+
+                            {
+                                if (language.LanguageId.Equals(name.LanguageId))
+                                {<bre>@name.LanguageName </bre>}
+                        }
+
+
+                        }
+
+                </td>
+                
+                <td>
+                    @*<a href="#" onclick="location.href = '@Url.Action("DeletePersonDb","Person", new { personId=item.PersonId})'">Delete</a>*@
+                    <a asp-action="Delete" asp-route-id="@item.PersonId">Delete</a>
+                </td>
+            </tr>
             }
 
         </tbody>

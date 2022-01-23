@@ -6,52 +6,56 @@
     <h2 class="uppercase">
         Create, Delete or View People
     </h2>
-
+    <br />
     <p>
         <a asp-action="CreatePerson">CreatePerson</a>
     </p>
-        
-        <div>
-            <form asp-action="Index" method="post" role="form">
+    <p>
+        <a asp-action="AddLanguage">Add-Language</a>
+
+    </p>
+
+    <div>
+        <form asp-action="Index" method="post" role="form">
+            @Html.AntiForgeryToken()
+
+            <h4>Filter</h4>
+            <label asp-for="FilterString"></label>
+            <input asp-for="FilterString" />
+            <input type="submit" class="btn btn-primary" name="btnFilter" value="search" />
+        </form>
+
+    </div>
+    @* <div>
+            <form asp-action="CreatePerson" method="post" role="form">
                 @Html.AntiForgeryToken()
+                <div>
+                    <h4>Filter</h4>
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" />
+                    <span style="color:crimson" asp-validation-for="Name"></span>
 
-                <h4>Filter</h4>
-                <label asp-for="FilterString"></label>
-                <input asp-for="FilterString" />
-                <input type="submit" class="btn btn-primary" name="btnFilter" value="search" />
+                    <label asp-for="Phone"></label>
+                    <input asp-for="Phone" />
+                    <span style="color:crimson" asp-validation-for="Phone"></span>
+
+                    <label asp-for="City"></label>
+                    <input asp-for="City" />
+                    <span style="color:crimson" asp-validation-for="City"></span>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-primary" name="btnCreate" value="Add Person" />
+                </div>
+                <span>
+                    @if (ViewBag.Message != null)
+                    {@ViewBag.Message}
+                </span>
             </form>
+        </div>*@
 
-        </div>
-        @* <div>
-                <form asp-action="CreatePerson" method="post" role="form">
-                    @Html.AntiForgeryToken()
-                    <div>
-                        <h4>Filter</h4>
-                        <label asp-for="Name"></label>
-                        <input asp-for="Name" />
-                        <span style="color:crimson" asp-validation-for="Name"></span>
-
-                        <label asp-for="Phone"></label>
-                        <input asp-for="Phone" />
-                        <span style="color:crimson" asp-validation-for="Phone"></span>
-
-                        <label asp-for="City"></label>
-                        <input asp-for="City" />
-                        <span style="color:crimson" asp-validation-for="City"></span>
-                    </div>
-                    <div>
-                        <input type="submit" class="btn btn-primary" name="btnCreate" value="Add Person" />
-                    </div>
-                    <span>
-                        @if (ViewBag.Message != null)
-                        {@ViewBag.Message}
-                    </span>
-                </form>
-            </div>*@
-
-        <div class="container">
-            <partial name="_partialListPeople" model="Model.ListPersonView" />
-        </div>
+    <div class="container">
+        <partial name="_partialListPeople" model="Model" />
+    </div>
 
 
 </div>

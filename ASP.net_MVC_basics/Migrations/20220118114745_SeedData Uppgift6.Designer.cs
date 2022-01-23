@@ -3,14 +3,16 @@ using ASP.net_MVC_basics.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASP.net_MVC_basics.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220118114745_SeedData Uppgift6")]
+    partial class SeedDataUppgift6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,13 +233,13 @@ namespace ASP.net_MVC_basics.Migrations
             modelBuilder.Entity("ASP.net_MVC_basics.Data.PeopleLanguageModel", b =>
                 {
                     b.HasOne("ASP.net_MVC_basics.Data.LanguageModel", "Language")
-                        .WithMany("SpokenByPeople")
+                        .WithMany("PeopleLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ASP.net_MVC_basics.Data.PeopleModel", "Person")
-                        .WithMany("SpeaksLanguages")
+                        .WithMany("PeopleLanguages")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
