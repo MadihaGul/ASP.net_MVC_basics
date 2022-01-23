@@ -19,8 +19,11 @@ namespace ASP.net_MVC_basics.Data
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
+        
         //Navigation properties
         public int CityId { get; set; }
         public virtual CityModel City { get; set; }
+
+        public List<PeopleLanguageModel> SpeaksLanguages { get; set; }
     }
 }

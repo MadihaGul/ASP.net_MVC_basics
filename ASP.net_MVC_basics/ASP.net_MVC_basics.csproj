@@ -19,6 +19,12 @@
     <Compile Remove="Migrations\20220116145610_One to Many EFuppgift5.Designer.cs" />
     <Compile Remove="Migrations\20220116153152_EFUppgift5 Seed Data.cs" />
     <Compile Remove="Migrations\20220116153152_EFUppgift5 Seed Data.Designer.cs" />
+    <Compile Remove="Migrations\20220118111821_EFuppgift6 Language added.cs" />
+    <Compile Remove="Migrations\20220118111821_EFuppgift6 Language added.Designer.cs" />
+    <Compile Remove="Migrations\20220118112406_EF Uppgift6.cs" />
+    <Compile Remove="Migrations\20220118112406_EF Uppgift6.Designer.cs" />
+    <Compile Remove="Migrations\20220120224408_EF6 Add Language.cs" />
+    <Compile Remove="Migrations\20220120224408_EF6 Add Language.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

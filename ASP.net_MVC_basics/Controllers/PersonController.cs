@@ -18,9 +18,9 @@ namespace ASP.net_MVC_basics.Controllers
         
         public IActionResult Index()
         {
-            PeopleViewModelDB ListPeopleViewModel = new PeopleViewModelDB { ListPersonView = _context.People.Include(p => p.City).ToList()};
-            
-            
+            PeopleViewModelDB ListPeopleViewModel = new PeopleViewModelDB { ListPersonView = _context.People.Include(p => p.City).Include(p=>p.SpeaksLanguages).ToList()};
+            ListPeopleViewModel.ListLanguage = _context.Languages.ToList();
+
             return View(ListPeopleViewModel);
         }
 
@@ -50,10 +50,43 @@ namespace ASP.net_MVC_basics.Controllers
             }
             return View(viewModel);
         }
+      
+     
+
+        public IActionResult AddLanguage()
+        {
+                ViewData["PersonId"] = new SelectList(_context.People, "PersonId", "Name");
+                ViewData["LanguageId"] = new SelectList(_context.Languages, "LanguageId", "LanguageName");
+             
+            return View();
+        }
+
+        // POST: City/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddLanguage([Bind("PersonId,LanguageId")] PeopleLanguageModel vmPeopleViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(vmPeopleViewModel);
+                await _context.SaveChangesAsync();               
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["PersonId"] = new SelectList(_context.People, "PersonId", "Name");
+            ViewData["LanguageId"] = new SelectList(_context.Languages, "LanguageId", "LanguageName");
+
+            return View(vmPeopleViewModel);
+        }
+
 
         public IActionResult CreatePerson()
         {
             ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityName");
+
             return View();
         }
 
@@ -137,8 +170,6 @@ namespace ASP.net_MVC_basics.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
 
         public IActionResult DeletePerson(int personId)
         {

@@ -3,14 +3,16 @@ using ASP.net_MVC_basics.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASP.net_MVC_basics.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220118143547_Added Lists EF6")]
+    partial class AddedListsEF6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,6 +97,9 @@ namespace ASP.net_MVC_basics.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
                     b.HasKey("LanguageId");
 
                     b.ToTable("Languages");
@@ -103,27 +108,32 @@ namespace ASP.net_MVC_basics.Migrations
                         new
                         {
                             LanguageId = 1,
-                            LanguageName = "English"
+                            LanguageName = "English",
+                            PersonId = 0
                         },
                         new
                         {
                             LanguageId = 2,
-                            LanguageName = "Swedish"
+                            LanguageName = "Swedish",
+                            PersonId = 0
                         },
                         new
                         {
                             LanguageId = 3,
-                            LanguageName = "Urdu"
+                            LanguageName = "Urdu",
+                            PersonId = 0
                         },
                         new
                         {
                             LanguageId = 4,
-                            LanguageName = "Arabic"
+                            LanguageName = "Arabic",
+                            PersonId = 0
                         },
                         new
                         {
                             LanguageId = 5,
-                            LanguageName = "French"
+                            LanguageName = "French",
+                            PersonId = 0
                         });
                 });
 
@@ -179,6 +189,9 @@ namespace ASP.net_MVC_basics.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -200,6 +213,7 @@ namespace ASP.net_MVC_basics.Migrations
                         {
                             PersonId = 1,
                             CityId = 1,
+                            LanguageId = 0,
                             Name = "Anna",
                             Phone = "+46718899111"
                         },
@@ -207,6 +221,7 @@ namespace ASP.net_MVC_basics.Migrations
                         {
                             PersonId = 2,
                             CityId = 1,
+                            LanguageId = 0,
                             Name = "Annika",
                             Phone = "+46718899122"
                         },
@@ -214,6 +229,7 @@ namespace ASP.net_MVC_basics.Migrations
                         {
                             PersonId = 3,
                             CityId = 2,
+                            LanguageId = 0,
                             Name = "Ali",
                             Phone = "+46718894444"
                         });
@@ -231,13 +247,13 @@ namespace ASP.net_MVC_basics.Migrations
             modelBuilder.Entity("ASP.net_MVC_basics.Data.PeopleLanguageModel", b =>
                 {
                     b.HasOne("ASP.net_MVC_basics.Data.LanguageModel", "Language")
-                        .WithMany("SpokenByPeople")
+                        .WithMany("PeopleLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ASP.net_MVC_basics.Data.PeopleModel", "Person")
-                        .WithMany("SpeaksLanguages")
+                        .WithMany("PeopleLanguages")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
