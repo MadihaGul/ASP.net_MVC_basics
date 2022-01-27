@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP.net_MVC_basics.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.net_MVC_basics.Controllers
 {
+    [Authorize]
     public class AjaxController : Controller
     {
         public IActionResult Index()
