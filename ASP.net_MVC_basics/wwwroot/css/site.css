@@ -64,7 +64,7 @@ body > header {
 
 li {
     list-style: none;
-    padding: 0 20px 0 20px;
+    padding: 0 15px 0 15px;
 }
 
     li:hover {
@@ -82,7 +82,7 @@ body > footer {
     background-color: cadetblue;
 }
 
-form {
+form-with-border {
     border-style: ridge;
     border-radius: 10px;
     width: 80%;

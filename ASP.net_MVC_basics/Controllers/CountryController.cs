@@ -1,4 +1,5 @@
 ﻿using ASP.net_MVC_basics.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ASP.net_MVC_basics.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CountryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -59,8 +61,53 @@ namespace ASP.net_MVC_basics.Controllers
             }
         }
 
-        // GET: CountryController/Delete/5
+        // GET:
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var countryModel = await _context.Countries.FindAsync(id);
+            if (countryModel == null)
+            {
+                return NotFound();
+            }
+            return View(countryModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("CountryId,CountryName")] CountryModel countryModel)
+        {
+            if (id != countryModel.CountryId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(countryModel);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CountryModelExists(countryModel.CountryId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+           return View(countryModel);
+        }
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -95,6 +142,12 @@ namespace ASP.net_MVC_basics.Controllers
             {
                 return View();
             }
+        }
+
+
+        private bool CountryModelExists(int id)
+        {
+            return _context.Countries.Any(e => e.CountryId == id);
         }
     }
 }

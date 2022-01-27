@@ -56,7 +56,9 @@
                 <th>
                     Language
                 </th>
-               
+                <th>
+                    Edit
+                </th>
                 <th>
                     Delete
                 </th>
@@ -95,7 +97,9 @@
                         }
 
                 </td>
-                
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PersonId">Edit</a>
+                </td>
                 <td>
                     @*<a href="#" onclick="location.href = '@Url.Action("DeletePersonDb","Person", new { personId=item.PersonId})'">Delete</a>*@
                     <a asp-action="Delete" asp-route-id="@item.PersonId">Delete</a>

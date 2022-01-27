@@ -22,9 +22,11 @@
             <th>
                 Name
             </th>
-
             <th>
-                Action
+                Edit
+            </th>
+            <th>
+                Delete
             </th>
         </tr>
 
@@ -37,7 +39,7 @@
                     @item.CountryName
 
                 </td>
-
+                <td><a asp-action="Edit" asp-route-id="@item.CountryId">Edit</a></td>
                 <td>
                     <a asp-action="Delete" asp-route-id="@item.CountryId">Delete</a>
                 </td>

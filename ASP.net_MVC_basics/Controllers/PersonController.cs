@@ -7,9 +7,11 @@ using ASP.net_MVC_basics.Models;
 using ASP.net_MVC_basics.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.net_MVC_basics.Controllers
 {
+    [Authorize]
     public class PersonController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -104,44 +106,6 @@ namespace ASP.net_MVC_basics.Controllers
             return View(peopleModel);
         }
 
-
-        //[HttpPost]
-        //public IActionResult CreatePerson(PeopleModel person)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.People.Add(person);
-        //        _context.SaveChanges();
-        //        TempData["shortMessage"] = "Success! Person added";
-        //        return RedirectToAction("Index");
-
-        //    }
-        //    else
-        //    {
-        //        TempData["shortMessage"] = "Error! Failed to add person";// + ModelState.Values;
-
-        //    }
-        //    return RedirectToAction("Index");
-        //}
-
-        //[HttpGet]
-        //public IActionResult DeletePersonDb(int personId)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        _context.People.Remove(_context.People.Find(personId));
-        //        _context.SaveChanges();
-        //        TempData["shortMessage"] = "Success! Person is deleted";
-
-        //    }
-        //    else { TempData["shortMessage"] = "Fail! Person not deleted"; }
-        //    return RedirectToAction("Index");
-
-        //}
-
-        // GET: City/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -179,6 +143,57 @@ namespace ASP.net_MVC_basics.Controllers
             TempData["shortMessage"] = "Success! Person deleted";
 
             return RedirectToAction("Index");
+        }
+
+        // GET:
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var peopleModel = await _context.People.FindAsync(id);
+            if (peopleModel == null)
+            {
+                return NotFound();
+            }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityName", peopleModel.CityId);
+
+            return View(peopleModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("PersonId,Name,Phone,CityId")] PeopleModel peopleModel)
+        {
+            if (id != peopleModel.PersonId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(peopleModel);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PeopleModelExists(peopleModel.PersonId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityName", peopleModel.CityId);
+            return View(peopleModel);
         }
 
 
