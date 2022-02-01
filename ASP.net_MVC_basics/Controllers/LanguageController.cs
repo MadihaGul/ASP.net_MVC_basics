@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASP.net_MVC_basics.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.net_MVC_basics.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class LanguageController : Controller
     {
         private readonly ApplicationDbContext _context;

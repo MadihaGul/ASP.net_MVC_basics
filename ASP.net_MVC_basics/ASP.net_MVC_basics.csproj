@@ -25,18 +25,34 @@
     <Compile Remove="Migrations\20220118112406_EF Uppgift6.Designer.cs" />
     <Compile Remove="Migrations\20220120224408_EF6 Add Language.cs" />
     <Compile Remove="Migrations\20220120224408_EF6 Add Language.Designer.cs" />
+    <Compile Remove="Migrations\20220126191554_Updated ApplicationUser.cs" />
+    <Compile Remove="Migrations\20220126191554_Updated ApplicationUser.Designer.cs" />
+    <Compile Remove="Migrations\20220126193653_Update User.cs" />
+    <Compile Remove="Migrations\20220126193653_Update User.Designer.cs" />
+    <Compile Remove="Migrations\20220126203343_Updated Application User and seeded Admin.cs" />
+    <Compile Remove="Migrations\20220126203343_Updated Application User and seeded Admin.Designer.cs" />
+    <Compile Remove="Migrations\20220126204547_Updated Application user and seeded admin.cs" />
+    <Compile Remove="Migrations\20220126204547_Updated Application user and seeded admin.Designer.cs" />
+    <Compile Remove="Migrations\20220126211115_Updated ApplicationUser and Seeded admin and roles.cs" />
+    <Compile Remove="Migrations\20220126211115_Updated ApplicationUser and Seeded admin and roles.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.1" />
     <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.2.1" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.21" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.21" />
+
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.21">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.21" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="React.AspNet" Version="5.2.12" />
   </ItemGroup>

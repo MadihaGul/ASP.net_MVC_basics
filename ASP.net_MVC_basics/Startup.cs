@@ -1,7 +1,9 @@
 using ASP.net_MVC_basics.Data;
+using ASP.net_MVC_basics.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,12 @@ namespace ASP.net_MVC_basics
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +65,8 @@ namespace ASP.net_MVC_basics
             );
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
@@ -68,6 +78,8 @@ namespace ASP.net_MVC_basics
                 endpoints.MapControllerRoute(name: "Game",
                                              pattern: "/GuessingGame"
                                              , defaults: new { controller = "Game", action = "GuessingGame" });
+
+                endpoints.MapRazorPages();
 
             });
         }
