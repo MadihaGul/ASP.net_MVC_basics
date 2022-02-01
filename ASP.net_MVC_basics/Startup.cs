@@ -10,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using JavaScriptEngineSwitcher.V8;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using React.AspNet;
 namespace ASP.net_MVC_basics
 {
     public class Startup
@@ -25,6 +27,9 @@ namespace ASP.net_MVC_basics
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+            services.AddJsEngineSwitcher( options=> options.DefaultEngineName=V8JsEngine.EngineName).AddV8();
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
@@ -45,6 +50,11 @@ namespace ASP.net_MVC_basics
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseReact(config =>
+            {
+               // config.AddScript("file");
+            }
+            );
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
