@@ -13,9 +13,8 @@
 <body>
 
     <header>
-        <h1>
-            <img src="~/images/MVC-logo.jpg" alt="Logo">
-        </h1>
+         <img src="~/images/MVC-logo.jpg" alt="Logo">
+        
         <nav>
 
             <ul class="navlist ">
@@ -29,6 +28,7 @@
                 {
                     <li>  <a class="bluetext bold" asp-controller="Ajax" asp-action="Index">Ajax</a></li>
                     <li>  <a class="bluetext bold" asp-controller="Person" asp-action="Index">People</a></li>
+                    <li>  <a class="bluetext bold" asp-controller="React" asp-action="Index">SPA-People</a></li>
                 }
                 @if (User.IsInRole("Admin"))
                 {
