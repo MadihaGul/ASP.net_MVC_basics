@@ -3,10 +3,14 @@ class PersonTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Peoplelist: []
+            Peoplelist: [],
+            Id: 0,
+            IsModalOpen: false
         }
     }
-
+    componentDidMount() {
+        this.getPeople()
+    }
     
     getPeople = () => {
         fetch("/React/GetPeople").then(response => response.json()).
@@ -29,16 +33,29 @@ class PersonTable extends React.Component {
     sortUndo() {
         this.getPeople()
     }
+    refreshPeopleList() {
+     
+        this.setState = ({
+            Id: 0,
+            IsModalOpen: false
+        })
+         this.getPeople()
+        
+        
+    }
+    
     render() {
-        const row = this.state.Peoplelist.map((list, i)=> {
-
+        const row = this.state.Peoplelist.map((list, i) => {
+    
             return (
                 <tr key={i}>
-                    
-                     <td >{i + 1}</td>
-                     <td>{list.name}</td>
+
+                    <td >{i + 1}</td>
+                    <td>{list.name}</td>
                     <td>{list.phone}</td>
-                    <td> <button  > Detail</button> </td>
+                    <td> <button type="button" data-toggle="modal" data-target="#detailPersonModal"
+                        onClick={() => { this.setState({ IsModalOpen: true, Id: list.personId }) }}> Detail</button> </td>
+                    
                 </tr>
             )
 
@@ -51,7 +68,12 @@ class PersonTable extends React.Component {
                     <div className="ml-2 mb-2 mt-4">
                     <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#createPeopleModal" >Create</button>
                     </div>
-                    <h4>PeopleList</h4><hr />
+                    
+                    <div className="float-right mr-2 mb-2 "><button onClick={() => this.refreshPeopleList()}>Reload People</button>
+                        <h4>PeopleList</h4>
+
+                    </div>
+                    <hr />
                     <h5>Sort</h5>
                     <button onClick={() => this.sortAtoZ()}>By Name(AtoZ)</button>
                     &nbsp;|&nbsp;
@@ -61,12 +83,14 @@ class PersonTable extends React.Component {
                     
                 </div>
                 <div>
-                    <table className="table table-active table-hover table-primary">
+                    <table id="Peoplelist" className="table table-active table-hover table-primary">
                         <TableHeaderPeople />
-                        <TableRowPeople />
-                        {/*<tbody>{ row}</tbody>*/}
+                  {/*      <TableRowPeople Peoplelist={this.state.Peoplelist} />*/}
+                        <tbody>{ row}</tbody>
                     </table>
-                    <CreatePeople/>
+                    <CreatePeople refreshPeopleList={() => { this.getPeople() }} />
+                    {this.state.IsModalOpen == true ? < PersonDetails refreshPeopleList={() => { this.refreshPeopleList() }} id={this.state.Id} CloseModal={() => {  this.setState({ IsModalOpen: false }) }} /> : null}
+
                 </div>
             </div>
 
@@ -85,7 +109,7 @@ class TableHeaderPeople extends React.Component {
                         <th >Name</th>
                         <th >Phone</th>
                         <th >Detail</th>
-                        {/*personId, name, phone, cityId, city, speaksLanguages})*/}
+                      
                     </tr>
                  </thead>
          
@@ -94,45 +118,52 @@ class TableHeaderPeople extends React.Component {
 }
 
 //==========================================================================================================
-class TableRowPeople extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            Peoplelist: []
-        }
-    }
-    componentDidMount() {
-        this.getPeople()
-    }
-    getPeople = () => {
-        fetch("/React/GetPeople").then(response => response.json()).
-            then(data => {
-                this.setState({ Peoplelist: data })
-            })
-    }
+//class TableRowPeople extends React.Component {
+//    constructor(props) {
+//        super(props);
+//        this.state = {
+//        /*    Peoplelist: [],*/
+//            Id: 0,
+//            IsModalOpen: false
+//        }
+//    }
+//    //componentDidMount() {
+//    //    this.getPeople()
+//    //}
+//    //getPeople = () => {
+//    //    fetch("/React/GetPeople").then(response => response.json()).
+//    //        then(data => {
+//    //            this.setState({ Peoplelist: data })
+//    //        })
+//    //}
         
-    render() {
-        const row = this.state.Peoplelist.map((list, i) => {
+//    render() {
+//        const row = this.props.Peoplelist.map((list, i) => {
 
-            return (
-                <tr key={i}>
+//            return (
+//                <tr key={i}>
 
-                    <td >{i + 1}</td>
-                    <td>{list.name}</td>
-                    <td>{list.phone}</td>
-                    <td> <button  > Detail</button> </td>
-                </tr>
-            )
-
-        })
-
-        return (
-            
+//                    <td >{i + 1}</td>
+//                    <td>{list.name}</td>
+//                    <td>{list.phone}</td>
+//                    <td> <button type="button" data-toggle="modal" data-target="#detailPersonModal" onClick={() => { this.setState({ IsModalOpen: true, Id: list.personId }) }}> Detail</button> </td>
                     
-            <tbody>{row}</tbody>
-        );
-    }
-}
+            
+//                </tr>
+               
+//            )
+
+//        })
+
+//        return (
+            
+//            <tbody>{row}
+//            </tbody>
+
+            
+//        );
+//    }
+//}
 
 
 //==========================================================================================================
@@ -143,22 +174,16 @@ class CreatePeople extends React.Component {
         this.state = {
             listCountry: [],
             listCity: [],
-           // listLanguage:[],
             Name: '',
             Phone: '',
             Country: 0,
             City: 0
-            //selectedLan: 0,     
-            //Language: []
         };
 
         this.handleCountryChange = this.handleCountryChange.bind(this);
         this.handleCityChange = this.handleCityChange.bind(this);
         this.onchange = this.onchange.bind(this);
-       // this.handleLanguageChange = this.handleLanguageChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.removeLanguage = this.removeLanguage.bind(this);
-        //this.AddLanguage = this.AddLanguage.bind(this);
     }
 
     handleCountryChange(e) {
@@ -187,32 +212,7 @@ class CreatePeople extends React.Component {
      
         this.setState({ City: e.target.value });
     }
-    //handleLanguageChange(e) {
- 
-    //    this.setState({ selectedLan: e.target.value });
-    //}
-
-    
-    //AddLanguage = (e) => {
-    //    debugger;
-    //    this.setState({
-    //        Language: [...this.state.Language, this.state.selectedLan]
-    //    })
-    //    const lstLan = this.state.listLanguage.filter(lan => lan.languageId !== this.state.selectedLan)
-    //    this.setState({ listLanguage: lstLan })
-    //}
-    //removeLanguage = (e) => {
-    //    const lstLan = this.state.Language.filter(lan => lan.languageId !== e.target.value);
-    //    this.setState({ Language: lstLan });
-
-
-    //    this.setState(prevState => ({
-    //        listLanguage: [...prevState.listLanguage, e.target.value]
-    //    }))
-
   
-    //};
-
     handleSubmit = (e) => {
         e.preventDefault();
         
@@ -226,7 +226,7 @@ class CreatePeople extends React.Component {
 
         xhr.send(data);
         xhr.onload = function () {
-            debugger
+           
             if (xhr.status === 200) {             
                 this.refreshCreateModal()
                 alert(xhr.response);
@@ -279,17 +279,6 @@ class CreatePeople extends React.Component {
  
   
     render() {
- 
-        //const row = this.state.Language.map((list, i) => {
-
-        //    return (
-        //        <td key={i}>
-        //            <button value={list.languageId} onClick={this.removeLanguage} id={list.languageId} >Speak {list.LanguageName} </button>
-
-        //        </td>
-        //    )
-
-        //})
 
         return (
 
@@ -299,7 +288,7 @@ class CreatePeople extends React.Component {
       <div className="modal-header">
         <h5 className="modal-title" >Create People</h5>
         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true" onClick={() => this.props.refreshPeopleList}>&times;</span>
         </button>
       </div>
       <div className="modal-body">
@@ -332,25 +321,7 @@ class CreatePeople extends React.Component {
                                         ))}
                                     </select>
                                 </div>
-                                {/*<div >*/}
-                                {/*    <table className="table ">*/}
-                                {/*        <tbody>{row}</tbody>*/}
-                                {/*    </table>*/}
-                                      
-                                {/*</div>*/}
-                                {/*<div className="form-group">*/}
-                                {/*    <label htmlFor="txtLanguage" className="col-form-label">Language:</label>*/}
-                                {/*    <select id="txtLanguage" value={this.state.selectedLan} onChange={this.handleLanguageChange} >*/}
-                                {/*        {*/}
-                                {/*            this.state.listLanguage.map((lstLan) => (*/}
-                                {/*                <option key={lstLan.languageId} value={lstLan.languageId}>{lstLan.languageName}</option>*/}
-                                {/*            ))}*/}
-                                {/*    </select>*/}
-                                {/*    */}{/*<button id="btnAddLanguage" onClick={this.AddLanguage} type="button"  >Add</button>*/}
-                                {/*  </div>*/}
-
-
-                                <button className="btn btn-primary" type="submit" onClick={this.handleSubmit} >Save</button>
+                            <button className="btn btn-primary" type="submit" onClick={this.handleSubmit} >Save</button>
 
         </form>
       </div>
@@ -365,6 +336,107 @@ class CreatePeople extends React.Component {
 
 //==========================================================================================================
 
+class PersonDetails extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            Id:0,
+            Name: '',
+           Phone: '',
+            Country: '',
+            City: ''
+           
+        }
+
+        this.handleDelete = this.handleDelete.bind(this);
+       this.refreshDetailModal = this.refreshDetailModal.bind(this);
+    }
+
+ 
+    handleDelete = (e) => {
+        e.preventDefault();
+
+        fetch("/React/DeletePerson?personId=" + this.state.Id).then(response => response.json()).
+            then(data => {
+               this.refreshDetailModal();
+                this.props.refreshPeopleList();
+                alert(data);
+            })
+
+    }
+
+    refreshDetailModal() {
+        debugger
+        this.setState({
+       
+           Id:0,
+            Name: '',
+          Phone: '',
+            Country: '',
+          City: ''
+        })
+        this.props.refreshPeopleList()
+        
+    }
+
+  
+    componentDidMount() {
+        if (this.props.id > 0) {
+            this.getPersonDetail()
+        }
+        
+    }
+    getPersonDetail = () => {
+        fetch("/React/GetPersonDetails?personId=" + this.props.id).then(response => response.json()).
+            then(data => {
+                this.setState({
+                    Id: data.personId,
+                    Name: data.name,
+                    Phone: data.phone,
+                    Country: '',
+                    City: ''})
+            })
+
+    }
+    
+
+
+    render() {
+
+        return (
+
+            <div className="modal fade" id="detailPersonModal" tabIndex="-1" role="dialog" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" >Details</h5>
+                            <button type="button" onClick={() => this.refreshDetailModal()} className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"  >&times;</span>
+                            </button>
+                       
+                        </div>
+                        <div className="modal-body">
+                            <form >
+                                <div className="form-group">
+                                    <label htmlFor="txtname" className="col-form-label">Name:</label>
+                                    <input type="text" className="form-control" name="Name" value={this.state.Name} id="txtname" disabled />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="txtPhone" className="col-form-label">Phone:</label>
+                                    <input type="text" className="form-control" name="Phone" value={this.state.Phone} id="txtPhone" disabled />
+                                </div>
+                              
+                                <button id ="btnDelete" className="btn btn-danger" type="submit" onClick={this.handleDelete}  >Delete</button>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
 
     
 

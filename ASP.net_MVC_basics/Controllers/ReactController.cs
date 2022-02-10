@@ -37,20 +37,39 @@ namespace ASP.net_MVC_basics.Controllers
                      _context.SaveChanges();
                     return Json("Person created and saved");
                 }
-                //if (peopleModel.PersonId==0)
-                //{
-                //    PeopleModel person = new PeopleModel {
-                //        Name = peopleModel.Name,
-                //        Phone= peopleModel.Phone,
-                //        CityId=peopleModel.CityId
-                //    };
-
+                
             }
             catch (Exception ex)
-            { }
+            { return Json(ex); }
             return Json(new { status = "Error", Message = "Person not saved" });
         }
-        
+
+        public JsonResult DeletePerson(int personId)
+        {
+            if (personId != 0)
+            {
+                var person = _context.People.Find(personId);
+                if (person != null)
+                {
+                    _context.People.Remove(person);
+                    _context.SaveChanges();
+                    return Json("Success! Person deleted");
+                }
+                else { return Json("Alert! Person doesn't exist"); }
+               
+                
+            }
+
+            return Json("Error! Person not deleted");
+        }
+        public JsonResult GetPersonDetails(int personId) 
+        {
+            var personInfo =//_context.People.Include(p => p.City).Where(x => x.PersonId == personId).SingleOrDefault();
+           _context.People.Where(x => x.PersonId == personId).SingleOrDefault();
+            return Json(personInfo);
+            //new { status = "Error", Message = "Person not saved" }
+        }
+
         public JsonResult GetInitialCites()
         {
             CityModel none = new CityModel
