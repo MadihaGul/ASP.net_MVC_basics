@@ -135,21 +135,29 @@ class CreatePeople extends React.Component {
             Name: '',
             Phone: '',            
             Country: 0,
-            City: 0
+            City: 0,
+
+            formErrors: { Name: '', Phone: '', Country:'', City: ''},
+            NameValid: false,
+            PhoneValid: false,
+            CountryValid: false,
+            CityValid: false,
+            formValid: false
         };
        
         this.handleCountryChange = this.handleCountryChange.bind(this);
-        this.handleCityChange = this.handleCityChange.bind(this);
+     /*   this.handleCityChange = this.handleCityChange.bind(this);*/
         this.onchange = this.onchange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleCountryChange(e) {
-       
-    
+        e.preventDefault();
+        const valid = this.validateField(e.target.name, e.target.value)
         this.setState({ Country: e.target.value });
-
-        const data = new FormData();   
+        if (valid)
+        {
+        const data = new FormData();
         data.append('countryId', e.target.value);
         const xhr = new XMLHttpRequest();
         xhr.open('post', '/React/GetCities', true);
@@ -158,40 +166,45 @@ class CreatePeople extends React.Component {
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-               
-                this.setState({ listCity: JSON.parse(xhr.response) });
+
+                this.setState({
+                    listCity: JSON.parse(xhr.response), CityValid: false,formValid: false, City:0
+                   });
             } else {
                 consle.log(xhr.status, ":", xhr.statusText); // 500: Internal server error
             }
-        }.bind(this)
-    }
+            }.bind(this)
 
-    handleCityChange(e) {
+           
+        }
+
+    }
+    //handleCityChange(e) {
      
-        this.setState({ City: e.target.value });
-    }
+    //    this.setState({ City: e.target.value },
+    //        () => { this.validateField(e.target.name, e.target.value) });
+    //}
 
-   
     handleSubmit = (e) => {
         e.preventDefault();
-        
-        const data = new FormData();
-        data.append('Name', this.state.Name.trim());
-        data.append('Phone', this.state.Phone.trim());
-        data.append('CityId', this.state.City);
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/React/CreatePerson', true);
+       
+            const data = new FormData();
+            data.append('Name', this.state.Name.trim());
+            data.append('Phone', this.state.Phone.trim());
+            data.append('CityId', this.state.City);
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/React/CreatePerson', true);
 
-        xhr.send(data);
-        xhr.onload = function () {
-           
-            if (xhr.status === 200) {             
-                this.refreshCreateModal()
-                alert(xhr.response);
-            } else {
-                consle.log(xhr.status, ":", xhr.statusText); // 500: Internal server error
-            }
-        }.bind(this);
+            xhr.send(data);
+            xhr.onload = function () {
+
+                if (xhr.status === 200) {
+                    this.refreshCreateModal()
+                    alert(xhr.response);
+                } else {
+                    consle.log(xhr.status, ":", xhr.statusText); // 500: Internal server error
+                }
+            }.bind(this);
         
     }
 
@@ -201,18 +214,123 @@ class CreatePeople extends React.Component {
             Name: '',
             Phone: '',
             Country: 0,
-            City: 0
+            City: 0,
+            formErrors: { Name: '', Phone: '', Country: '', City: '' },
+            NameValid: false,
+            PhoneValid: false,
+            CountryValid: false,
+            CityValid: false,
+            formValid: false          
             
         })
         this.props.refreshPeopleList()
 }
 
-    onchange = (e) => {
-        this.setState({
+    onchange(e) {
+        e.preventDefault();
+        const valid = this.validateField(e.target.name, e.target.value)
+
+        this.setState(
+            {
                 [e.target.name]: e.target.value
-        })       
+            })
+       
     }
  
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let NameValid = this.state.NameValid;
+        let PhoneValid = this.state.PhoneValid;
+        let CountryValid = this.state.CountryValid;
+        let CityValid = this.state.CityValid;
+   
+
+        switch (fieldName) {
+            case 'Name':
+                if (value.trim() === '') {
+                    NameValid = false;
+                    fieldValidationErrors.Name = NameValid ? '' : ' is required';
+                }
+                else if (/[^a-zA-Z -]/.test(value)) {
+                    NameValid = false;
+                    fieldValidationErrors.Name = NameValid ? '' : ' Invalid characters';
+                }
+                else if (value.trim().length <2 || value.trim().length > 100) {
+                    NameValid = false;
+                    fieldValidationErrors.Name = NameValid ? '' : ' length must be between 2-100 characters';
+                }
+                else {
+                    NameValid = true;
+                    fieldValidationErrors.Name = NameValid ? '' : 'Error! Contact Admin';
+                    
+                }
+                break;
+
+            case 'Phone':
+                var pattern = new RegExp(/^[+ 0-9\b -]+$/);
+                if (value.trim() === '') {
+                    PhoneValid = false;
+                    fieldValidationErrors.Phone = PhoneValid ? '' : ' is required';
+                }
+                else if (value.trim().length < 9 || value.trim().length > 13) {
+                    PhoneValid = false;
+                    fieldValidationErrors.Phone = PhoneValid ? '' : ' Invalid length';
+                }
+                else if (!pattern.test(value.trim())) {
+
+                    PhoneValid = false;
+                    fieldValidationErrors.Phone = PhoneValid ? '' : 'Enter only numbers';
+                }
+                else {
+                    PhoneValid = true;
+                    fieldValidationErrors.Phone = PhoneValid ? '' : 'Error! Contact Admin';
+                }
+                break;
+
+            case 'Country':
+                if (value == 0) {
+                    CountryValid = false;
+                    fieldValidationErrors.Country = CountryValid ? '' : ' is required';
+                }
+                else
+                {
+                    CountryValid = true;
+                    fieldValidationErrors.Country = CountryValid ? '' : ' Error! Contact Admin';
+                }
+                
+                break;
+            case 'City':
+                if (value == 0) {
+                    CountryValid = false;
+                    fieldValidationErrors.Country = CountryValid ? '' : ' is required';
+                }
+                else {
+                    CityValid = true;
+                    fieldValidationErrors.City = CityValid ? '' : ' Error! Contact Admin';
+                }
+                
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            formErrors: fieldValidationErrors,
+            NameValid: NameValid,
+            PhoneValid: PhoneValid,
+            CountryValid: CountryValid,
+            CityValid: CityValid
+        }, this.validateForm);
+
+
+        if (fieldName == 'Name') { return NameValid }
+        else if (fieldName == 'Phone') { return PhoneValid }
+        else if (fieldName == 'Country') { return CountryValid }
+        else if (fieldName == 'City') { return CityValid }
+    }
+
+    validateForm() {
+        this.setState({ formValid: this.state.NameValid && this.state.PhoneValid && this.state.CountryValid && this.state.CityValid });
+    }
 
     componentDidMount() {
         this.getCountries()
@@ -232,9 +350,22 @@ class CreatePeople extends React.Component {
             })
     }
  
-  
+    errorClass(error) {
+        return (error.length === 0 ? '' : 'Error');
+    }
     render() {
-
+        const FormErrors = ({ formErrors }) =>
+            <div className='formErrors'>
+                {Object.keys(formErrors).map((fieldName, i) => {
+                    if (formErrors[fieldName].length > 0) {
+                        return (
+                            <p key={i}>{fieldName} {formErrors[fieldName]}</p>
+                        )
+                    } else {
+                        return '';
+                    }
+                })}
+            </div>
         return (
 
 <div className="modal fade" id="createPeopleModal" tabIndex="-1" role="dialog" aria-hidden="true">
@@ -246,32 +377,36 @@ class CreatePeople extends React.Component {
              <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div className="modal-body">
-                            <form >
-          <div className="form-group">
-               <label htmlFor="txtname" className="col-form-label">Name:</label>
-               <input type="text" className="form-control" name="Name" value={this.state.Name} id="txtname" onChange={this.onchange} />
+        <div className="modal-body">
+                <div className="panel panel-default">
+                    <FormErrors formErrors={this.state.formErrors} />
+                </div>
+
+          <form >
+                                <div className="form-group" >
+                                    <label htmlFor="txtname" className="col-form-label">Name:</label>*
+                                    <input type="text" className="form-control" name="Name" value={this.state.Name} id="txtname" onChange={(event) => this.onchange(event)} />
                               
                                   
           </div>
-          <div className="form-group">
-                                    <label htmlFor="txtPhone" className="col-form-label">Phone:</label>
-                                    <input type="text" className="form-control" name="Phone" value={this.state.Phone} id="txtPhone" onChange={this.onchange}/>
+                                <div className="form-group ">
+                                    <label htmlFor="txtPhone" className="col-form-label">Phone:</label>*
+                                    <input type="text" className="form-control" name="Phone" value={this.state.Phone} id="txtPhone" onChange={(event) => this.onchange(event)} />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="txtCountry" >Country:</label>                                       
-                                    <select id="txtCountry" value={this.state.Country} onChange={this.handleCountryChange} >
+                                <div className="form-group ">
+                                    <label htmlFor="txtCountry" >Country:</label>*
+                                    <select id="txtCountry" name="Country" value={this.state.Country} onChange={(event) => this.handleCountryChange(event)} >
                                             {this.state.listCountry.map((lstCountry,i) => (
                                                 <option key={i} value={lstCountry.countryId}>{lstCountry.countryName}</option>
                                                 ))}
-                                            </select>
+                                    </select>
                                        
                                     
                                 </div>
                             
-                                <div className="form-group">
-                                    <label htmlFor="txtCity" className="col-form-label">City:</label>
-                                    <select id="txtCity" value={this.state.City} onChange={this.handleCityChange} >
+                                <div className="form-group ">
+                                    <label htmlFor="txtCity" className="col-form-label">City:</label>*
+                                    <select disabled={!this.state.CountryValid} id="txtCity" name="City" value={this.state.City} onChange={(event) => this.onchange(event)} >
                                         {
                                             this.state.listCity.map((lstCity, i) => (
                                             <option key={i} value={lstCity.cityId}>{lstCity.cityName}</option>
@@ -279,7 +414,7 @@ class CreatePeople extends React.Component {
                                     </select>
                                 </div>
                            
-                            <button className="btn btn-primary" type="submit" onClick={this.handleSubmit} >Save</button>
+                                <button className="btn btn-primary" disabled={!this.state.formValid} type="submit" onClick={this.handleSubmit} >Save</button>
 
         </form>
       </div>
@@ -290,6 +425,8 @@ class CreatePeople extends React.Component {
             );
     }
 }
+//==========================================================================================================
+//==========================================================================================================
 
 //==========================================================================================================
 //==========================================================================================================
@@ -305,8 +442,10 @@ class PersonDetails extends React.Component {
             Phone: '',
             Country: '',
             City: '',
-            Languages: ''
-           
+            Languages: '',
+
+            formErrors: { Language: '' },
+            LanguageValid: false
         }
         this.handleLanguageChange = this.handleLanguageChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -316,7 +455,8 @@ class PersonDetails extends React.Component {
     }
 
     handleLanguageChange(e) {
-
+   
+        const valid = this.validateField(e.target.name, e.target.value)
         this.setState({ Language: e.target.value });
     }
 
@@ -365,11 +505,42 @@ class PersonDetails extends React.Component {
         }.bind(this);
 
     }
+
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let LanguageValid = this.state.LanguageValid;
     
+
+
+        switch (fieldName) {
+        
+            case 'Language':
+                if (value == 0) {
+                    LanguageValid = false;
+                    fieldValidationErrors.Language = LanguageValid ? '' : ' is required';
+                }
+                else {
+                    LanguageValid = true;
+                    fieldValidationErrors.Language = LanguageValid ? '' : ' Error! Contact Admin';
+                }
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            formErrors: fieldValidationErrors,
+
+            LanguageValid: LanguageValid
+        });
+
+
+        if (fieldName == 'Language') { return LanguageValid }
+    }
+
     postDeleteDisable() {
-        document.getElementById('btnDelete').disabled = true
-        document.getElementById('btnAddLanguage').disabled = true
+        document.getElementById('btnDelete').disabled = true        
         document.getElementById('txtlistLanguage').disabled = true
+        this.setState({ LanguageValid: false });
     }
 
     refreshDetailModal() {
@@ -459,13 +630,13 @@ class PersonDetails extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="txtlistLanguage" className="col-form-label">Language:</label>
-                                    <select id="txtlistLanguage" value={this.state.Language} onChange={this.handleLanguageChange} >
+                                    <select id="txtlistLanguage" value={this.state.Language} name="Language" onChange={this.handleLanguageChange} >
                                         {
                                             this.state.listLanguage.map((lstLanguage, i) => (
                                                 <option key={i} value={lstLanguage.languageId}>{lstLanguage.languageName}</option>
                                             ))}
                                     </select>
-                                    <button id="btnAddLanguage"className="btn btn-primary" type="submit" onClick={this.handleAddLanguage} >Add</button>
+                                    <button id="btnAddLanguage" className="btn btn-primary" type="submit" disabled={!this.state.LanguageValid} onClick={this.handleAddLanguage} >Add</button>
                                 </div>
 
                                 
