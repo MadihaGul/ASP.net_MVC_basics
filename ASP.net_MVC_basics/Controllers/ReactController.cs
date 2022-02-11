@@ -1,4 +1,5 @@
 ﻿using ASP.net_MVC_basics.Data;
+using ASP.net_MVC_basics.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,18 @@ namespace ASP.net_MVC_basics.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(peopleModel);
-                     _context.SaveChanges();
+                    _context.SaveChanges();
+                if(peopleModel.SpeaksLanguages!=null)
+                    { 
+                    PeopleLanguageModel peopleLanguage = new PeopleLanguageModel();
+                    foreach (var language in peopleModel.SpeaksLanguages)
+                    {
+                        peopleLanguage.LanguageId = language.LanguageId;
+                        peopleLanguage.PersonId = peopleModel.PersonId;
+                        _context.PeopleLanguage.Add(peopleLanguage);
+                        _context.SaveChanges();
+                    }
+                }
                     return Json("Person created and saved");
                 }
                 
@@ -42,6 +54,24 @@ namespace ASP.net_MVC_basics.Controllers
             catch (Exception ex)
             { return Json(ex); }
             return Json(new { status = "Error", Message = "Person not saved" });
+        }
+
+        public JsonResult AddLanguage(PeopleLanguageModel peopleLanguage)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(peopleLanguage);
+                    _context.SaveChanges();
+                   
+                    return Json("Language saved");
+                }
+
+            }
+            catch (Exception ex)
+            { return Json(ex); }
+            return Json(new { status = "Error", Message = "Language not saved" });
         }
 
         public JsonResult DeletePerson(int personId)
@@ -64,10 +94,29 @@ namespace ASP.net_MVC_basics.Controllers
         }
         public JsonResult GetPersonDetails(int personId) 
         {
-            var personInfo =//_context.People.Include(p => p.City).Where(x => x.PersonId == personId).SingleOrDefault();
-           _context.People.Where(x => x.PersonId == personId).SingleOrDefault();
-            return Json(personInfo);
-            //new { status = "Error", Message = "Person not saved" }
+            ReactViewModel personDetails = new ReactViewModel();
+            var PersonInfo = _context.People.Include(p => p.City).Include(p => p.SpeaksLanguages).Where(p=>p.PersonId==personId).SingleOrDefault();
+            personDetails.PersonId = PersonInfo.PersonId;
+            personDetails.Name = PersonInfo.Name;
+            personDetails.Phone = PersonInfo.Phone;
+       
+            personDetails.City = PersonInfo.City.CityName;
+            var personCountry = _context.Countries.Find(PersonInfo.City.CountryId);
+            personDetails.Country = personCountry.CountryName;
+
+            if (PersonInfo.SpeaksLanguages != null)
+            { 
+                foreach (var language in PersonInfo.SpeaksLanguages)
+                {
+                    foreach (var name in _context.Languages)
+                    {
+                        if (language.LanguageId.Equals(name.LanguageId))
+                        { personDetails.SpeakLanguages += name.LanguageName+ "\t"; }
+                    }
+                }
+
+            }
+            return Json(personDetails);
         }
 
         public JsonResult GetInitialCites()
@@ -123,13 +172,6 @@ namespace ASP.net_MVC_basics.Controllers
             CityList.AddRange(_context.Cities.Where(c => c.CountryId == countryId));
 
             return Json(CityList);
-        }
-
-        public JsonResult DetailPerson( int id)
-        {
-            PeopleModel PersonDetail = _context.People.Find(id);
-
-            return Json(PersonDetail);
         }
 
         
